@@ -1,0 +1,44 @@
+<div class="chat-container">
+  @for (content of contents; let i = $index; track i) {
+    <div class="chat-message {{content.agent}}">
+    <img
+      class="avatar"
+      [src]="'/assets/avatar-' + content.agent + '.png'"
+      [alt]="content.agent + 'icon'"
+    />
+    <div class="message-details">
+      <markdown
+        class="message-content"
+        [class.loading]="content.loading"
+        [data]="content.message | lineBreak"
+      />
+    </div>
+  </div>
+  } @empty {
+  <div class="message-container">
+    <p class="message">
+      Welcome to your Gemini App for text generation. <br />
+      Write an instruction to start.
+    </p>
+  </div>
+  }
+</div>
+
+<div class="chat-footer-container">
+  <mat-form-field class="chat-input">
+    <input
+      placeholder="Send a message"
+      matInput
+      [(ngModel)]="message"
+      (keyup.enter)="generateText()"
+    />
+  </mat-form-field>
+  <button
+    mat-icon-button
+    color="accent"
+    [disabled]="!message"
+    (click)="generateText()"
+  >
+    <mat-icon color="accent">send</mat-icon>
+  </button>
+</div>

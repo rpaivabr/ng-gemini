@@ -1,0 +1,70 @@
+<div class="chat-container">
+  @for (content of contents; let i = $index; track i) {
+  <div class="chat-message {{ content.agent }}">
+    <img
+      class="avatar"
+      [src]="'/assets/avatar-' + content.agent + '.png'"
+      [alt]="content.agent + 'icon'"
+    />
+    <div class="message-details">
+      @if (content.imagePreview) {
+      <img [src]="content.imagePreview" height="150px" alt="Preview" />
+      }
+      <p
+        class="message-content"
+        [class.loading]="content.loading"
+        [innerHTML]="content.message | lineBreak"
+      ></p>
+    </div>
+  </div>
+  } @empty {
+  <div class="message-container">
+    <p class="message">
+      Welcome to your Gemini Vision App <br />
+      Write a text and attach an image to start.
+    </p>
+  </div>
+  }
+</div>
+
+<div class="chat-footer-container">
+  <mat-form-field class="chat-input">
+    @if(imageFile) {
+    <div class="image-preview">
+      <img [src]="imageFile.preview" width="100px" alt="Preview" />
+      <button
+        mat-icon-button
+        matTooltip="Remove"
+        color="warn"
+        (click)="this.imageFile = undefined; inputImage.value = ''"
+      >
+        <mat-icon class="custom-icon-size">close</mat-icon>
+      </button>
+    </div>
+    }
+    <input
+      placeholder="Send a message"
+      matInput
+      [(ngModel)]="message"
+      (keyup.enter)="sendMessage()"
+    />
+
+    <button mat-icon-button matSuffix class="image-upload-button">
+      <input
+        #inputImage
+        type="file"
+        accept="image/png, image/jpeg, image/webp"
+        (change)="selectImage($event)"
+      />
+      <mat-icon color="primary">add_photo_alternate</mat-icon>
+    </button>
+  </mat-form-field>
+  <button
+    mat-icon-button
+    color="accent"
+    [disabled]="!imageFile || !message"
+    (click)="sendMessage(); inputImage.value = ''"
+  >
+    <mat-icon color="accent">send</mat-icon>
+  </button>
+</div>
